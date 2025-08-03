@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Bookitlist" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -12,5 +12,53 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/roboto_font_family
+        </item> <!-- For views inheriting from Android framework defaults -->
+        <item name="fontFamily">@font/roboto_font_family
+        </item> <!-- For Material 3 components if using an M3 theme -->
+        <item name="materialButtonStyle">@style/App.Widget.Button.Roboto</item>
+        <item name="editTextStyle">@style/CommonEditTextStyle</item>
+    </style>
+
+    <style name="App.Widget.Button.Roboto" parent="Widget.MaterialComponents.Button">
+        <!-- The fontFamily might be inherited from the theme, but you can explicitly set it
+             or a specific weight here if needed -->
+        <item name="app:fontFamily">@font/roboto_regular
+        </item> <!-- e.g., ensure buttons use medium -->
+    </style>
+
+    <style name="CommonButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:textAllCaps">false</item> <!-- To match your design's casing -->
+        <item name="cornerRadius">50dp</item> <!-- For rounded corners -->
+    </style>
+
+    <style name="SignInButton" parent="CommonButton">
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="SignUpButton" parent="CommonButton">
+        <item name="android:backgroundTint">@color/button_sign_up_background</item>
+        <item name="android:textColor">@color/button_sign_up_text_color</item>
+    </style>
+
+    <style name="CommonEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">60dp</item>
+        <item name="android:layout_marginEnd">60dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:background">@drawable/edit_text_bg</item> <!-- You'll need to create this drawable -->
+        <item name="android:textColorHint">@color/edit_text_hint_color</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

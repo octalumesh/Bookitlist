@@ -10,6 +10,25 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Bookitlist" />
+        android:theme="@style/Theme.Bookitlist">
+
+        <activity
+            android:name=".WelcomeActivity"
+            android:exported="true">  <!-- Must be true for launcher activity -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".SignupActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".SigninActivity"
+            android:exported="false" />
+
+    </application>
 
 </manifest>
