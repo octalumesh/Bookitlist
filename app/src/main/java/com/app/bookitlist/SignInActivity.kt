@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import com.app.bookitlist.data.models.request.LoginRequest
 import com.app.bookitlist.databinding.SigninActivityBinding
 import com.app.bookitlist.data.models.response.AuthResponse
+import com.app.bookitlist.data.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -42,13 +43,27 @@ class SignInActivity : AppCompatActivity() {
         })
 
         // Example: Trigger sign-in when a button is clicked
-         binding.signInButton.setOnClickListener {
-             val phoneNumber = binding.phoneNumberEditText.text.toString()
-             val password = binding.passwordEditText.text.toString()
-             // TODO: Add proper validation
-             val loginRequest = LoginRequest(phoneNumber, password)
-             signInViewModel.signIn(loginRequest)
-         }
+        binding.signInButton.setOnClickListener {
+            val phoneNumber = binding.phoneNumberEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
+
+
+
+            if (phoneNumber.isEmpty()) {
+                showToast(getString(R.string.err_msg_enter_phone_number))
+                return@setOnClickListener
+            }
+
+            if (password.isEmpty()) {
+                showToast(getString(R.string.err_msg_enter_password))
+                return@setOnClickListener
+            }
+
+
+            val loginRequest = LoginRequest(phoneNumber, password)
+            signInViewModel.signIn(loginRequest)
+
+        }
 
         binding.signUpLinkTextView.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)

@@ -19,6 +19,13 @@
     <string name="sign_in_with_apple">Sign in with Apple</string>
     <string name="phone_your_number_hint">Your number</string>
     <string name="_91">+91</string>
+    <string name="err_msg_enter_phone_number">Please enter your phone number</string>
+    <string name="err_msg_enter_password">Please enter your password</string>
+    <string name="err_msg_enter_full_name">Please enter your full name</string>
+    <string name="err_msg_enter_username">Please enter your username</string>
+    <string name="err_msg_enter_email">Please enter your email</string>
+    <string name="err_msg_confirm_password">Please confirm your password</string>
+    <string name="err_msg_password_mismatch">Passwords do not match</string>
 
 
 </resources>

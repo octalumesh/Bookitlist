@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.app.bookitlist.databinding.SignupActivityBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,8 +48,55 @@ class SignUpActivity : AppCompatActivity() {
         alreadyHaveAccountTextView = binding.alreadyHaveAccountTextView
         signInLinkTextView = binding.signInLinkTextView
 
-        // You can set up listeners or other logic here
         binding.signInLinkTextView.setOnClickListener {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
+
+        signUpButton.setOnClickListener {
+            val fullName = fullNameEditText.text.toString().trim()
+            val username = usernameEditText.text.toString().trim()
+            val email = emailEditText.text.toString().trim()
+            val phoneNumber = phoneEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
+            val confirmPassword = confirmPasswordEditText.text.toString().trim()
+
+            if (fullName.isEmpty()) {
+                Toast.makeText(this, getString(R.string.err_msg_enter_full_name), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (username.isEmpty()) {
+                Toast.makeText(this, getString(R.string.err_msg_enter_username), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (email.isEmpty()) {
+                Toast.makeText(this, getString(R.string.err_msg_enter_email), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (phoneNumber.isEmpty()) {
+                Toast.makeText(this, getString(R.string.err_msg_enter_phone_number), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (password.isEmpty()) {
+                Toast.makeText(this, getString(R.string.err_msg_enter_password), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (confirmPassword.isEmpty()) {
+                Toast.makeText(this, getString(R.string.err_msg_confirm_password), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (password != confirmPassword) {
+                Toast.makeText(this, getString(R.string.err_msg_password_mismatch), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Proceed with sign-up logic
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
