@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.app.bookitlist.databinding.SignupActivityBinding
 
-class SignupActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: SignupActivityBinding
 

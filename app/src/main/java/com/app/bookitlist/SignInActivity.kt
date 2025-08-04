@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.app.bookitlist.databinding.SigninActivityBinding
 
-class SigninActivity : AppCompatActivity() {
+class SignInActivity : AppCompatActivity() {
 
     private lateinit var binding: SigninActivityBinding
 
