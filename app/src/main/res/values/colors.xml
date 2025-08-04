@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="transparent">#00000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="colorPrimary">#5B67CA</color> <!-- Blue for the "Sign In" button -->
+    <color name="colorPrimary">#3B4ED5</color> <!-- Blue for the "Sign In" button -->
     <color name="text_color_primary">#FFFFFF</color>
     <color name="text_color_secondary">#E0E0E0</color> <!-- A slightly off-white for subtitle -->
     <color name="button_sign_up_background">#FFFFFF</color>
