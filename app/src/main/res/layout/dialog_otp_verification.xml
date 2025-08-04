@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Close Button -->
+    <ImageView
+        android:id="@+id/btnClose"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="end"
+        android:layout_marginBottom="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/cross_icon"
+        android:contentDescription="Close dialog" />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp"
+        android:text="OTP Verification"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Subtitle -->
+    <TextView
+        android:id="@+id/tvSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:text="Please enter your verification code\nwe have sent to your phone"
+        android:textColor="@color/gray_600"
+        android:textSize="14sp"
+        android:lineSpacingExtra="2dp" />
+
+    <!-- OTP Input Container -->
+    <LinearLayout
+        android:id="@+id/llOtpContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etOtp1"
+            style="@style/OtpEditTextStyle"
+            android:layout_marginEnd="8dp"
+            android:nextFocusForward="@id/etOtp2" />
+
+        <EditText
+            android:id="@+id/etOtp2"
+            style="@style/OtpEditTextStyle"
+            android:layout_marginEnd="8dp"
+            android:nextFocusForward="@id/etOtp3" />
+
+        <EditText
+            android:id="@+id/etOtp3"
+            style="@style/OtpEditTextStyle"
+            android:layout_marginEnd="8dp"
+            android:nextFocusForward="@id/etOtp4" />
+
+        <EditText
+            android:id="@+id/etOtp4"
+            style="@style/OtpEditTextStyle"
+            android:layout_marginEnd="8dp"
+            android:nextFocusForward="@id/etOtp5" />
+
+        <EditText
+            android:id="@+id/etOtp5"
+            style="@style/OtpEditTextStyle"
+            android:layout_marginEnd="8dp"
+            android:nextFocusForward="@id/etOtp6" />
+
+        <EditText
+            android:id="@+id/etOtp6"
+            style="@style/OtpEditTextStyle"
+            android:nextFocusForward="@id/btnVerify" />
+
+    </LinearLayout>
+
+    <!-- Resend OTP -->
+    <TextView
+        android:id="@+id/tvResendOtp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginBottom="24dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="8dp"
+        android:text="Resend OTP"
+        android:textColor="@color/gray_600"
+        android:textSize="14sp"
+        android:textStyle="normal" />
+
+    <!-- Verify Button -->
+    <Button
+        android:id="@+id/btnVerify"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/button_primary_background"
+        android:text="Verify"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:elevation="2dp" />
+
+</LinearLayout>

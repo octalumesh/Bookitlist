@@ -4,6 +4,7 @@ import android.content.Context
 import com.app.bookitlist.data.api.interceptor.AuthInterceptor
 import com.app.bookitlist.data.api.interceptor.LoggingInterceptor
 import com.app.bookitlist.data.api.interceptor.NetworkInterceptor
+import com.google.gson.GsonBuilder
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -21,7 +22,7 @@ class ApiClient @Inject constructor(
 ) {
 
     companion object {
-        private const val BASE_URL = "https://bookitlist.com/api.php"
+        private const val BASE_URL = "https://bookitlist.com/api.php/"
         private const val CONNECT_TIMEOUT = 30L
         private const val READ_TIMEOUT = 30L
         private const val WRITE_TIMEOUT = 30L
@@ -40,10 +41,12 @@ class ApiClient @Inject constructor(
         .addNetworkInterceptor(networkInterceptor)
         .build()
 
+    val gson = GsonBuilder().setLenient().create()
+
     val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
     val apiService: ApiService = retrofit.create(ApiService::class.java)

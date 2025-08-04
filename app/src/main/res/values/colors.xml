@@ -13,7 +13,11 @@
     <color name="text_color_secondary">#E0E0E0</color> <!-- A slightly off-white for subtitle -->
     <color name="button_sign_up_background">#FFFFFF</color>
     <color name="button_sign_up_text_color">#28293A</color> <!-- Or your preferred dark color -->
-    <color name="edit_text_hint_color">#A0A0A0</color>
+    <color name="edit_text_hint_color">#80FFFFFF</color>
     <color name="edit_text_background_color">#F0F0F0</color>
     <color name="terms_text_color">#8A8A8A</color>
+    <color name="gray_400">#9CA3AF</color>
+    <color name="gray_600">#6B7280</color>
+    <color name="primary_blue">#4F46E5</color>
+    <color name="dialog_background">#F9FAFB</color>
 </resources>

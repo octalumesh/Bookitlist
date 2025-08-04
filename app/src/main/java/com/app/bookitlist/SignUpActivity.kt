@@ -1,5 +1,6 @@
 package com.app.bookitlist
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -7,7 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.app.bookitlist.databinding.SignupActivityBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: SignupActivityBinding
@@ -45,5 +48,9 @@ class SignUpActivity : AppCompatActivity() {
         signInLinkTextView = binding.signInLinkTextView
 
         // You can set up listeners or other logic here
+        binding.signInLinkTextView.setOnClickListener {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

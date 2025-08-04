@@ -22,10 +22,10 @@ import retrofit2.http.Url
 interface ApiService {
 
     // Authentication endpoints
-    @POST("auth/login")
+    @POST("login")
     suspend fun login(@Body request: LoginRequest): Response<BaseResponse<AuthResponse>>
 
-    @POST("auth/register")
+    @POST("register")
     suspend fun register(@Body request: RegisterRequest): Response<BaseResponse<AuthResponse>>
 
     @POST("auth/refresh")

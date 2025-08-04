@@ -15,15 +15,15 @@ class AuthInterceptor @Inject constructor(
         val originalRequest = chain.request()
         
         // Skip auth for login/register endpoints
-        if (originalRequest.url.encodedPath.contains("auth/login") ||
-            originalRequest.url.encodedPath.contains("auth/register")) {
-            return chain.proceed(originalRequest)
-        }
+//        if (originalRequest.url.encodedPath.contains("login") ||
+//            originalRequest.url.encodedPath.contains("register")) {
+//            return chain.proceed(originalRequest)
+//        }
         
         val token = tokenManager.getAccessToken()
         
         val authenticatedRequest = originalRequest.newBuilder()
-            .header("Authorization", "Bearer $token")
+            .header("Authorizationkey", "TVBBRE1JTjpSZ3NwUmdzcDEyMzQh")
             .header("Content-Type", "application/json")
             .header("Accept", "application/json")
             .build()
