@@ -62,8 +62,8 @@
                 android:id="@+id/phoneNumberLayout"
                 style="@style/CommonPhoneEditTextStyle"
                 android:layout_width="0dp"
-                android:layout_marginTop="32dp"
                 android:layout_height="60dp"
+                android:layout_marginTop="32dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingHorizontal="16dp"
@@ -88,8 +88,8 @@
                     android:background="@null"
                     android:hint="@string/phone_number"
                     android:inputType="phone"
-                    android:textColorHint="@color/edit_text_hint_color"
                     android:textColor="@color/white"
+                    android:textColorHint="@color/edit_text_hint_color"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -142,10 +142,10 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginEnd="16dp"
+                    android:src="@drawable/google_icon"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/sign_in_with_google"
-                    android:padding="8dp"
-                    android:src="@drawable/google_icon" />
+                    android:padding="8dp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/facebookLoginButton"
@@ -184,7 +184,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/prompt_dont_have_account"
-                    android:textColor="@color/text_color_secondary"
+                    android:textColor="@color/edit_text_hint_color"
                     android:textSize="19sp"
                     app:fontFamily="@font/roboto_regular" />
 
@@ -194,7 +194,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:text="@string/sign_up"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:textSize="19sp"
                     android:textStyle="bold"
                     app:fontFamily="@font/roboto_bold" />
