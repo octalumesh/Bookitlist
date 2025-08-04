@@ -12,17 +12,17 @@
         android:layout_height="0dp"
         android:background="@drawable/login_signup_bottom"
         android:contentDescription="@string/app_name"
-        app:layout_constraintTop_toTopOf="@id/guideline"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="match_parent"
-        app:layout_constraintGuide_percent="0.2"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintGuide_percent="0.2" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                 android:id="@+id/logo"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="70dp"
                 android:src="@drawable/bookitlist_logo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -58,15 +58,40 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/logo" />
 
-            <EditText
-                android:id="@+id/phoneNumberEditText"
-                style="@style/CommonEditTextStyle"
+            <LinearLayout
+                android:id="@+id/phoneNumberLayout"
+                style="@style/CommonPhoneEditTextStyle"
+                android:layout_width="0dp"
                 android:layout_marginTop="32dp"
-                android:hint="@string/phone_number"
-                android:inputType="phone"
+                android:layout_height="60dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/signInTitle" />
+                app:layout_constraintTop_toBottomOf="@id/signInTitle">
+
+                <TextView
+                    android:id="@+id/countryCodePrefixTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_91"
+                    android:textColor="@color/text_color_primary"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/phoneNumberEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="@string/phone_number"
+                    android:inputType="phone"
+                    android:textColorHint="@color/edit_text_hint_color"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/passwordEditText"
@@ -76,12 +101,13 @@
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/phoneNumberEditText" />
+                app:layout_constraintTop_toBottomOf="@id/phoneNumberLayout" />
 
             <Button
                 android:id="@+id/signInButton"
                 style="@style/SignInButton"
                 android:layout_width="0dp"
+                android:layout_height="52dp"
                 android:layout_marginTop="32dp"
                 android:text="@string/sign_in"
                 app:layout_constraintEnd_toEndOf="@id/passwordEditText"
@@ -145,7 +171,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="60dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

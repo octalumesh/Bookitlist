@@ -38,7 +38,7 @@
                 android:id="@+id/logo"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="70dp"
                 android:src="@drawable/bookitlist_logo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +61,6 @@
                 android:id="@+id/fullNameEditText"
                 style="@style/CommonEditTextStyle"
                 android:layout_marginTop="32dp"
-                android:layout_marginBottom="20dp"
                 android:hint="@string/hint_full_name"
                 android:inputType="textPersonName"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +70,7 @@
             <EditText
                 android:id="@+id/usernameEditText"
                 style="@style/CommonEditTextStyle"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:hint="@string/username"
                 android:inputType="text"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -81,37 +80,61 @@
             <EditText
                 android:id="@+id/emailEditText"
                 style="@style/CommonEditTextStyle"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/usernameEditText" />
 
-            <EditText
-                android:id="@+id/phoneEditText"
-                style="@style/CommonEditTextStyle"
-                android:layout_marginTop="20dp"
-                android:hint="@string/phone_number"
-                android:inputType="phone"
+            <LinearLayout
+                android:id="@+id/phoneNumberLayout"
+                style="@style/CommonPhoneEditTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/emailEditText" />
+                app:layout_constraintTop_toBottomOf="@id/emailEditText">
+
+                <TextView
+                    android:id="@+id/countryCodePrefixTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_91"
+                    android:textColor="@color/text_color_primary"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/phoneNumberEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="@string/phone_number"
+                    android:inputType="phone"
+                    android:textColor="@color/text_color_primary"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/passwordEditText"
                 style="@style/CommonEditTextStyle"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/phoneEditText" />
+                app:layout_constraintTop_toBottomOf="@id/phoneNumberLayout" />
 
             <EditText
                 android:id="@+id/confirmPasswordEditText"
                 style="@style/CommonEditTextStyle"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:hint="@string/confirm_password"
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -132,6 +155,7 @@
                 android:id="@+id/signUpButton"
                 style="@style/SignInButton"
                 android:layout_width="0dp"
+                android:layout_height="52dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/sign_up"
                 app:layout_constraintEnd_toEndOf="@id/confirmPasswordEditText"

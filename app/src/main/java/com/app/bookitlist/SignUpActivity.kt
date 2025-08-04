@@ -39,7 +39,7 @@ class SignUpActivity : AppCompatActivity() {
         fullNameEditText = binding.fullNameEditText
         usernameEditText = binding.usernameEditText
         emailEditText = binding.emailEditText
-        phoneEditText = binding.phoneEditText
+        phoneEditText = binding.phoneNumberEditText
         passwordEditText = binding.passwordEditText
         confirmPasswordEditText = binding.confirmPasswordEditText
         termsAndConditionsTextView = binding.termsAndConditionsTextView
