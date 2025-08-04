@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Bookitlist" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Bookitlist" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -23,7 +23,7 @@
     <style name="App.Widget.Button.Roboto" parent="Widget.MaterialComponents.Button">
         <!-- The fontFamily might be inherited from the theme, but you can explicitly set it
              or a specific weight here if needed -->
-        <item name="app:fontFamily">@font/roboto_regular
+        <item name="android:fontFamily">@font/roboto_regular
         </item> <!-- e.g., ensure buttons use medium -->
     </style>
 
