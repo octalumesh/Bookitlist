@@ -5,15 +5,16 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import com.app.bookitlist.data.utils.setTransparentStatusBarAndEdgeToEdge
 
 class SplashActivity : AppCompatActivity() {
-
 
     companion object {
         private const val SPLASH_DELAY: Long = 3000
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTransparentStatusBarAndEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         // Use a Handler to delay the start of WelcomeActivity

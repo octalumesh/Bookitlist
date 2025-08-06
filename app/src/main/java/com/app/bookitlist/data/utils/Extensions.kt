@@ -3,14 +3,17 @@ package com.app.bookitlist.data.utils
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -37,6 +40,25 @@ fun Context.hideKeyboard(view: View) {
 fun Context.showKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+}
+
+fun Activity.setTransparentStatusBarAndEdgeToEdge(isLightStatusBarIcons: Boolean = true) {
+    val window: Window = this.window
+
+    // 1. Make content go full screen (edge-to-edge)
+    // This tells the system that the app's content should extend behind the system bars.
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+
+    // 2. Make the status bar transparent
+    window.statusBarColor = Color.TRANSPARENT
+
+    // 3. Control the appearance of status bar icons
+    // This ensures icons are visible against your status bar background.
+    val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+    insetsController.isAppearanceLightStatusBars = isLightStatusBarIcons
+
+    // Optional: Control navigation bar icons as well
+    // insetsController?.isAppearanceLightNavigationBars = isLightStatusBarIcons
 }
 
 fun Context.openUrl(url: String) {

@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.app.bookitlist.data.utils.setTransparentStatusBarAndEdgeToEdge
 import com.app.bookitlist.databinding.SignupActivityBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,6 +33,7 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SignupActivityBinding.inflate(layoutInflater)
+        setTransparentStatusBarAndEdgeToEdge()
         setContentView(binding.root)
 
         // Initialize views

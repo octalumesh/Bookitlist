@@ -2,6 +2,7 @@ package com.app.bookitlist
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -37,6 +38,8 @@ class OtpVerificationDialog(
             .setView(binding.root)
             .setCancelable(false)
             .create()
+
+        dialog.window?.setBackgroundDrawableResource(R.color.transparent)
 
         // Setup all views and listeners
         setupViews()

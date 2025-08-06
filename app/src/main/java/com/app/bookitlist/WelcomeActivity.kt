@@ -3,6 +3,7 @@ package com.app.bookitlist
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.app.bookitlist.data.utils.setTransparentStatusBarAndEdgeToEdge
 import com.app.bookitlist.databinding.ActivityWelcomeBinding
 
 class WelcomeActivity : AppCompatActivity() {
@@ -11,6 +12,7 @@ class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTransparentStatusBarAndEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         // Set the content view to the root of the binding

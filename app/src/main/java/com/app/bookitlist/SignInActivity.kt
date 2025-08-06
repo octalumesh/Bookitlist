@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import com.app.bookitlist.data.models.request.LoginRequest
 import com.app.bookitlist.databinding.SigninActivityBinding
 import com.app.bookitlist.data.models.response.AuthResponse
+import com.app.bookitlist.data.utils.setTransparentStatusBarAndEdgeToEdge
 import com.app.bookitlist.data.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -22,6 +23,7 @@ class SignInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SigninActivityBinding.inflate(layoutInflater)
+        setTransparentStatusBarAndEdgeToEdge()
         setContentView(binding.root)
 
         // Observe signInResult LiveData

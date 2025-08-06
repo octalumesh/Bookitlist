@@ -20,6 +20,14 @@
         <item name="editTextStyle">@style/CommonEditTextStyle</item>
     </style>
 
+    <style name="Theme.Bookitlist.TransparentStatusBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:navigationBarColor">?attr/colorPrimaryVariant</item>
+    </style>
+
     <style name="App.Widget.Button.Roboto" parent="Widget.MaterialComponents.Button">
         <!-- The fontFamily might be inherited from the theme, but you can explicitly set it
              or a specific weight here if needed -->
