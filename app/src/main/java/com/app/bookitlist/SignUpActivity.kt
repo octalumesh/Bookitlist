@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.app.bookitlist.data.models.request.LoginRequest
 import com.app.bookitlist.data.models.request.RegisterRequest
 import com.app.bookitlist.data.utils.hideKeyboard
 import com.app.bookitlist.data.utils.setTransparentStatusBarAndEdgeToEdge
@@ -106,7 +105,14 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val registerRequest = RegisterRequest(task = "register", firstName = "", email = "", ref = "", phoneNumber = "+91$phoneNumber", password = password)
+            val registerRequest = RegisterRequest(
+                task = "register",
+                firstName = fullName,
+                email = email,
+                ref = "",
+                phoneNumber = "+91$phoneNumber",
+                password = password,
+            )
             hideKeyboard()
             signUpViewModel.signUp(registerRequest)
         }
