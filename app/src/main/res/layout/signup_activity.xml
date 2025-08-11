@@ -12,17 +12,17 @@
         android:layout_height="0dp"
         android:background="@drawable/login_signup_bottom"
         android:contentDescription="@string/app_name"
-        app:layout_constraintTop_toTopOf="@id/guideline"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="match_parent"
-        app:layout_constraintGuide_percent="0.2"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintGuide_percent="0.2" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -58,16 +58,6 @@
                 app:layout_constraintTop_toBottomOf="@id/logo" />
 
             <EditText
-                android:id="@+id/fullNameEditText"
-                style="@style/CommonEditTextStyle"
-                android:layout_marginTop="32dp"
-                android:hint="@string/hint_full_name"
-                android:inputType="textPersonName"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/signUpTitle" />
-
-            <EditText
                 android:id="@+id/usernameEditText"
                 style="@style/CommonEditTextStyle"
                 android:layout_marginTop="16dp"
@@ -75,7 +65,7 @@
                 android:inputType="text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fullNameEditText" />
+                app:layout_constraintTop_toBottomOf="@id/signUpTitle" />
 
             <EditText
                 android:id="@+id/emailEditText"

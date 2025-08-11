@@ -17,10 +17,14 @@ abstract class BaseRepository {
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiCall()
-                println("Response: $response")
+                println("Response: ${response.body()}")
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body?.success == true) {
+                        if(body.token.orEmpty().isNotEmpty()) {
+                            Timber.d("Token received: ${body.token}")
+                            return@withContext ApiResult.TokenSuccess(body.token.orEmpty())
+                        }
                         ApiResult.Success(body.data!!)
                     } else {
                         ApiResult.Error(Exception(body?.msg ?: "Unknown error"))

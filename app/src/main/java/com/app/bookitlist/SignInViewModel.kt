@@ -22,6 +22,9 @@ class SignInViewModel @Inject constructor(private val apiRepository: ApiReposito
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
+    private val _token = MutableLiveData<String>()
+    val token: LiveData<String> = _token
+
     fun signIn(request: LoginRequest) {
         viewModelScope.launch {
             try {
@@ -31,6 +34,7 @@ class SignInViewModel @Inject constructor(private val apiRepository: ApiReposito
                         // Handle successful login
                         _signInResult.postValue(response.data)
                     }
+
                     is ApiResult.Error -> {
                         // Handle error
                         _error.postValue(response.exception.message ?: "Unknown error")
@@ -38,6 +42,10 @@ class SignInViewModel @Inject constructor(private val apiRepository: ApiReposito
                     is ApiResult.Loading -> {
                         // Handle loading state if needed
                         // This can be used to show a loading spinner in the UI
+                    }
+
+                    is ApiResult.TokenSuccess -> {
+                        _token.postValue(response.userToken)
                     }
                 }
 

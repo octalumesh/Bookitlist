@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.app.bookitlist.data.models.request.RegisterRequest
+import com.app.bookitlist.data.utils.DialogFragmentProgressManager
 import com.app.bookitlist.data.utils.hideKeyboard
 import com.app.bookitlist.data.utils.setTransparentStatusBarAndEdgeToEdge
 import com.app.bookitlist.databinding.SignupActivityBinding
@@ -24,7 +25,6 @@ class SignUpActivity : AppCompatActivity() {
 
     private lateinit var logoImageView: ImageView
     private lateinit var signUpTitleTextView: TextView
-    private lateinit var fullNameEditText: EditText
     private lateinit var usernameEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var phoneEditText: EditText
@@ -46,7 +46,6 @@ class SignUpActivity : AppCompatActivity() {
         // Initialize views
         logoImageView = binding.logo
         signUpTitleTextView = binding.signUpTitle
-        fullNameEditText = binding.fullNameEditText
         usernameEditText = binding.usernameEditText
         emailEditText = binding.emailEditText
         phoneEditText = binding.phoneNumberEditText
@@ -63,17 +62,11 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         signUpButton.setOnClickListener {
-            val fullName = fullNameEditText.text.toString().trim()
             val username = usernameEditText.text.toString().trim()
             val email = emailEditText.text.toString().trim()
             val phoneNumber = phoneEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
             val confirmPassword = confirmPasswordEditText.text.toString().trim()
-
-            if (fullName.isEmpty()) {
-                Toast.makeText(this, getString(R.string.err_msg_enter_full_name), Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
 
             if (username.isEmpty()) {
                 Toast.makeText(this, getString(R.string.err_msg_enter_username), Toast.LENGTH_SHORT).show()
@@ -107,13 +100,14 @@ class SignUpActivity : AppCompatActivity() {
 
             val registerRequest = RegisterRequest(
                 task = "register",
-                firstName = fullName,
+                firstName = username,
                 email = email,
                 ref = "",
                 phoneNumber = "+91$phoneNumber",
                 password = password,
             )
             hideKeyboard()
+            DialogFragmentProgressManager.showApiProgress(supportFragmentManager)
             signUpViewModel.signUp(registerRequest)
         }
 
@@ -124,7 +118,7 @@ class SignUpActivity : AppCompatActivity() {
             println("Sign-in successful: ${authResponse}")
             //Toast.makeText(this, "Sign-in successful: ${authResponse.user?.name}", Toast.LENGTH_LONG).show()
             // TODO: Navigate to your main activity or dashboard
-            //showDialog()
+            DialogFragmentProgressManager.dismissProgress()
         })
 
         // Observe error LiveData
@@ -133,7 +127,28 @@ class SignUpActivity : AppCompatActivity() {
             // For example, show a toast with the error message
             //showDialog()
             Timber.e("Sign-in error: $errorMessage")
+            DialogFragmentProgressManager.dismissProgress()
             Toast.makeText(this, "$errorMessage", Toast.LENGTH_LONG).show()
         })
+
+        // Observe error LiveData
+        signUpViewModel.token.observe(this, Observer { token ->
+            // Handle error
+            // For example, show a toast with the error message
+            //showDialog()
+            DialogFragmentProgressManager.dismissProgress()
+            showDialog(token)
+        })
+    }
+
+    fun showDialog(token: String) {
+        val otpDialog = OtpVerificationDialog(
+            token = token,
+            phoneNumber = "+91${phoneEditText.text.toString().trim()}",
+            onVerificationSuccess = { /* Handle success */ },
+            onResendOtp = { /* Handle resend */ },
+            activityContext = this
+        )
+        otpDialog.show(supportFragmentManager, "OtpVerificationDialog")
     }
 }

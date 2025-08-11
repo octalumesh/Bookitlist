@@ -2,63 +2,90 @@ package com.app.bookitlist
 
 import android.app.Dialog
 import android.content.Context
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.app.bookitlist.data.models.request.OTPRequest
+import com.app.bookitlist.data.utils.DialogFragmentProgressManager
 import com.app.bookitlist.databinding.DialogOtpVerificationBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import kotlin.getValue
 
+@AndroidEntryPoint
 class OtpVerificationDialog(
-    private val activity: FragmentActivity,
+    private val activityContext: FragmentActivity, // Renamed to avoid confusion with Fragment.activity
     private val phoneNumber: String,
+    private val token: String,
     private val onVerificationSuccess: () -> Unit,
     private val onResendOtp: () -> Unit
-) {
+) : DialogFragment() {
 
-    private lateinit var dialog: Dialog
-    private lateinit var binding: DialogOtpVerificationBinding
+    private var _binding: DialogOtpVerificationBinding? = null
+    private val binding get() = _binding!! // Property delegate to ensure non-null access in lifecycle methods
+
     private lateinit var otpEditTexts: List<EditText>
     private var currentOtp = ""
     private val viewModel: OtpVerificationViewModel by lazy {
-        ViewModelProvider(activity)[OtpVerificationViewModel::class.java]
+        ViewModelProvider(activityContext)[OtpVerificationViewModel::class.java]
     }
 
-    fun show() {
-        // Initialize ViewBinding
-        binding = DialogOtpVerificationBinding.inflate(LayoutInflater.from(activity))
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        _binding = DialogOtpVerificationBinding.inflate(LayoutInflater.from(context))
 
-        // Create dialog with ViewBinding root
-        dialog = AlertDialog.Builder(activity)
+        val dialog = AlertDialog.Builder(requireActivity())
             .setView(binding.root)
             .setCancelable(false)
             .create()
 
         dialog.window?.setBackgroundDrawableResource(R.color.transparent)
-
-        // Setup all views and listeners
-        setupViews()
-        observeViewModel()
-
-        // Show dialog
-        dialog.show()
-
-        // Focus on first EditText and show keyboard
-        otpEditTexts[0].requestFocus()
-        showKeyboard(otpEditTexts[0])
+        return dialog
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Return the binding root if you are using onCreateDialog with a custom view.
+        // DialogFragment will take care of adding it to the dialog.
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupViews()
+        observeViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Focus on first EditText and show keyboard
+        if (::otpEditTexts.isInitialized && otpEditTexts.isNotEmpty()) {
+            otpEditTexts[0].requestFocus()
+            showKeyboard(otpEditTexts[0])
+        }
+    }
+
+
     private fun setupViews() {
-        // Initialize OTP EditTexts using ViewBinding - much cleaner than findViewById
+        // Initialize OTP EditTexts using ViewBinding
         otpEditTexts = listOf(
             binding.etOtp1,
             binding.etOtp2,
@@ -73,7 +100,7 @@ class OtpVerificationDialog(
 
         // Close button click listener
         binding.btnClose.setOnClickListener {
-            dialog.dismiss()
+            dismiss() // Use DialogFragment's dismiss method
         }
 
         // Resend OTP click listener
@@ -81,76 +108,74 @@ class OtpVerificationDialog(
             clearOtpInputs()
             onResendOtp()
             viewModel.resendOtp()
-            Toast.makeText(activity, "OTP resent successfully", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activityContext, "OTP resent successfully", Toast.LENGTH_SHORT).show()
         }
 
         // Verify button click listener
         binding.btnVerify.setOnClickListener {
             if (currentOtp.length == 6) {
-                viewModel.verifyOtp(currentOtp)
+                DialogFragmentProgressManager.showApiProgress(activityContext.supportFragmentManager)
+                viewModel.verifyOtp(OTPRequest(otp = currentOtp, token = token));
             } else {
-                Toast.makeText(activity, "Please enter complete OTP", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activityContext, "Please enter complete OTP", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun observeViewModel() {
-        viewModel.verificationStatus.observe(activity) { status ->
-            when (status) {
-                is VerificationStatus.Loading -> {
-                    binding.btnVerify.isEnabled = false
-                    binding.btnVerify.text = "Verifying..."
-                }
+        viewModel.verificationStatus.observe(viewLifecycleOwner, Observer { authResponse ->
+            DialogFragmentProgressManager.dismissProgress()
+            println("Sign-in successful: ${authResponse}")
+            Toast.makeText(activityContext, "Sign-in successful", Toast.LENGTH_LONG).show() // Simplified toast
+            onVerificationSuccess() // Call the success callback
+            dismiss() // Dismiss dialog on success
+        })
 
-                is VerificationStatus.Success -> {
-                    Toast.makeText(activity, "OTP verified successfully", Toast.LENGTH_SHORT).show()
-                    dialog.dismiss()
-                    onVerificationSuccess()
-                }
+        viewModel.error.observe(viewLifecycleOwner, Observer { errorMessage ->
+            DialogFragmentProgressManager.dismissProgress()
+            Toast.makeText(activityContext, "$errorMessage", Toast.LENGTH_LONG).show()
+        })
 
-                is VerificationStatus.Error -> {
-                    Toast.makeText(activity, status.message, Toast.LENGTH_SHORT).show()
-                    clearOtpInputs()
-                    resetVerifyButton()
-                }
-            }
-        }
+        viewModel.token.observe(viewLifecycleOwner, Observer { newToken ->
+             DialogFragmentProgressManager.dismissProgress()
+             // Assuming token observation means a new token was received after resend,
+             // No specific UI action mentioned here other than dismissing progress.
+             // If this observer is for the initial token, it might need different handling.
+             // For now, let's assume it's related to OTP flow updates.
+            Timber.d("Token observed: $newToken")
+            onVerificationSuccess() // Call the success callback
+            dismiss() // Dismiss dialog on token observation
+        })
     }
 
     private fun setupOtpInputs() {
         otpEditTexts.forEachIndexed { index, editText ->
-            // Add text change listener for each OTP input
             editText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                    // Not needed for this implementation
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    // Not needed for this implementation
-                }
-
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: Editable?) {
                     val text = s.toString()
-
-                    // If user entered a digit, move to next field
-                    if (text.length == 1) {
-                        if (index < otpEditTexts.size - 1) {
-                            otpEditTexts[index + 1].requestFocus()
-                        }
+                    if (text.length == 1 && index < otpEditTexts.size - 1) {
+                        otpEditTexts[index + 1].requestFocus()
                     }
-
-                    // Update current OTP string
                     updateCurrentOtp()
                 }
             })
 
-            // Handle backspace key press
             editText.setOnKeyListener { _, keyCode, event ->
                 if (keyCode == KeyEvent.KEYCODE_DEL && event.action == KeyEvent.ACTION_DOWN) {
                     if (editText.text.isEmpty() && index > 0) {
-                        // Move to previous field and clear it
                         otpEditTexts[index - 1].requestFocus()
                         otpEditTexts[index - 1].setText("")
+                        // Update current OTP after clearing a field via backspace
+                        updateCurrentOtp()
+                    } else if (editText.text.isNotEmpty() && index > 0) {
+                        // If current field has text, backspace should clear current field first.
+                        // Default behavior handles this for the most part.
+                        // If it becomes empty, then we might want to move focus.
+                        // The current logic moves focus if it's already empty.
+                    } else if (editText.text.isEmpty() && index == 0) {
+                        // If first field is empty and backspace is pressed, do nothing extra.
                     }
                 }
                 false
@@ -159,39 +184,35 @@ class OtpVerificationDialog(
     }
 
     private fun updateCurrentOtp() {
-        // Combine all OTP digits into a single string
         currentOtp = otpEditTexts.joinToString("") { it.text.toString() }
-
-        // Auto-verify when all 6 digits are entered
-        if (currentOtp.length == 6) {
-            CoroutineScope(Dispatchers.Main).launch {
-                delay(300) // Small delay for better user experience
-                viewModel.verifyOtp(currentOtp)
-            }
-        }
+        resetVerifyButton() // Removed auto-verify, button click is explicit
     }
 
     private fun resetVerifyButton() {
-        binding.btnVerify.isEnabled = true
+        binding.btnVerify.isEnabled = true // Enable only if OTP is full
         binding.btnVerify.text = "Verify"
     }
 
     private fun clearOtpInputs() {
-        // Clear all OTP input fields
         otpEditTexts.forEach { it.setText("") }
-        // Focus back to first field
-        otpEditTexts[0].requestFocus()
+        if (otpEditTexts.isNotEmpty()) {
+            otpEditTexts[0].requestFocus()
+        }
         currentOtp = ""
+        resetVerifyButton() // Update button state after clearing
     }
 
     private fun showKeyboard(editText: EditText) {
-        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = activityContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
     }
 
-    fun dismiss() {
-        if (::dialog.isInitialized && dialog.isShowing) {
-            dialog.dismiss()
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null // Clear view binding reference
     }
+
+    // To show this dialog, you would call:
+    // val dialog = OtpVerificationDialog(requireActivity(), "phoneNumber", "token", onSuccessLambda, onResendLambda)
+    // dialog.show(requireActivity().supportFragmentManager, "OtpVerificationDialogTag")
 }

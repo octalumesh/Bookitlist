@@ -48,6 +48,15 @@ class SignInActivity : AppCompatActivity() {
             Toast.makeText(this, "$errorMessage", Toast.LENGTH_LONG).show()
         })
 
+        // Observe error LiveData
+        signInViewModel.token.observe(this, Observer { token ->
+            // Handle error
+            // For example, show a toast with the error message
+            //showDialog()
+            DialogFragmentProgressManager.dismissProgress()
+            Toast.makeText(this, "login successfully", Toast.LENGTH_LONG).show()
+        })
+
         // Example: Trigger sign-in when a button is clicked
         binding.signInButton.setOnClickListener {
             val phoneNumber = binding.phoneNumberEditText.text.toString()
@@ -73,15 +82,5 @@ class SignInActivity : AppCompatActivity() {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
-    }
-
-    fun showDialog() {
-        val otpDialog = OtpVerificationDialog(
-            phoneNumber = "+1234567890",
-            onVerificationSuccess = { /* Handle success */ },
-            onResendOtp = { /* Handle resend */ },
-            activity = this
-        )
-        otpDialog.show()
     }
 }

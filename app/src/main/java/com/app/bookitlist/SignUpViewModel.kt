@@ -8,15 +8,21 @@ import com.app.bookitlist.data.models.base.ApiResult
 import com.app.bookitlist.data.models.request.RegisterRequest
 import com.app.bookitlist.data.models.response.AuthResponse
 import com.app.bookitlist.data.respository.ApiRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignUpViewModel(private val apiRepository: ApiRepository) : ViewModel() {
+@HiltViewModel
+class SignUpViewModel @Inject constructor(private val apiRepository: ApiRepository) : ViewModel() {
 
     private val _signUpResult = MutableLiveData<AuthResponse>()
     val signUpResult: LiveData<AuthResponse> = _signUpResult
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
+
+    private val _token = MutableLiveData<String>()
+    val token: LiveData<String> = _token
 
     fun signUp(request: RegisterRequest) {
         viewModelScope.launch {
@@ -26,6 +32,11 @@ class SignUpViewModel(private val apiRepository: ApiRepository) : ViewModel() {
                     is ApiResult.Success -> {
                         // Handle successful login
                         _signUpResult.postValue(response.data)
+                    }
+
+                    is ApiResult.TokenSuccess -> {
+                        // Handle token success
+                        _token.postValue(response.userToken)
                     }
 
                     is ApiResult.Error -> {
