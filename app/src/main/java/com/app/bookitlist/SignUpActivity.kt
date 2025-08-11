@@ -7,10 +7,16 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import com.app.bookitlist.data.models.request.LoginRequest
+import com.app.bookitlist.data.models.request.RegisterRequest
+import com.app.bookitlist.data.utils.hideKeyboard
 import com.app.bookitlist.data.utils.setTransparentStatusBarAndEdgeToEdge
 import com.app.bookitlist.databinding.SignupActivityBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
@@ -29,6 +35,8 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var signUpButton: Button
     private lateinit var alreadyHaveAccountTextView: TextView
     private lateinit var signInLinkTextView: TextView
+
+    private val signUpViewModel: SignUpViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,9 +106,28 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Proceed with sign-up logic
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
+            val registerRequest = RegisterRequest(task = "register", firstName = "", email = "", ref = "", phoneNumber = "+91$phoneNumber", password = password)
+            hideKeyboard()
+            signUpViewModel.signUp(registerRequest)
         }
+
+        // Observe signInResult LiveData
+        signUpViewModel.signUpResult.observe(this, Observer { authResponse ->
+            // Handle successful sign-in
+            // For example, show a toast and navigate to the next screen
+            println("Sign-in successful: ${authResponse}")
+            //Toast.makeText(this, "Sign-in successful: ${authResponse.user?.name}", Toast.LENGTH_LONG).show()
+            // TODO: Navigate to your main activity or dashboard
+            //showDialog()
+        })
+
+        // Observe error LiveData
+        signUpViewModel.error.observe(this, Observer { errorMessage ->
+            // Handle error
+            // For example, show a toast with the error message
+            //showDialog()
+            Timber.e("Sign-in error: $errorMessage")
+            Toast.makeText(this, "$errorMessage", Toast.LENGTH_LONG).show()
+        })
     }
 }

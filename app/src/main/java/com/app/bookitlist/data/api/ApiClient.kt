@@ -16,13 +16,13 @@ import javax.inject.Singleton
 
 @Singleton
 class ApiClient @Inject constructor(
-    private val context: Context,
-    private val authInterceptor: AuthInterceptor,
-    private val networkInterceptor: NetworkInterceptor
+    context: Context,
+    authInterceptor: AuthInterceptor,
+    networkInterceptor: NetworkInterceptor
 ) {
 
     companion object {
-        private const val BASE_URL = "https://bookitlist.com/api.php/"
+        private const val BASE_URL = "https://bookitlist.com/"
         private const val CONNECT_TIMEOUT = 30L
         private const val READ_TIMEOUT = 30L
         private const val WRITE_TIMEOUT = 30L
@@ -41,12 +41,10 @@ class ApiClient @Inject constructor(
         .addNetworkInterceptor(networkInterceptor)
         .build()
 
-    val gson = GsonBuilder().setLenient().create()
-
     val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     val apiService: ApiService = retrofit.create(ApiService::class.java)

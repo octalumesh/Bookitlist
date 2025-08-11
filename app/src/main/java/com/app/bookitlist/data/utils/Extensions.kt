@@ -265,7 +265,7 @@ fun <T> Response<BaseResponse<T>>.getResult(): T? {
 
 fun <T> Response<BaseResponse<T>>.getErrorMessage(): String {
     return if (isSuccessful) {
-        body()?.message ?: "Unknown error"
+        body()?.msg ?: "Unknown error"
     } else {
         message() ?: "Network error"
     }

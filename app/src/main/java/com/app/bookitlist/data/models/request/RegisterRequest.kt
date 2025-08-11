@@ -1,8 +1,10 @@
 package com.app.bookitlist.data.models.request
 
 data class RegisterRequest(
-    val name: String,
+    val firstName: String,
     val email: String,
+    val phoneNumber: String,
     val password: String,
-    val phone: String
+    val ref: String,
+    val task: String = "register"
 )

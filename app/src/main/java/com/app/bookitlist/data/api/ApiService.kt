@@ -1,11 +1,10 @@
 package com.app.bookitlist.data.api
 
 import com.app.bookitlist.data.models.base.BaseResponse
-import com.app.bookitlist.data.models.request.LoginRequest
-import com.app.bookitlist.data.models.request.RegisterRequest
 import com.app.bookitlist.data.models.response.AuthResponse
 import com.app.bookitlist.data.models.response.User
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -22,11 +21,27 @@ import retrofit2.http.Url
 interface ApiService {
 
     // Authentication endpoints
-    @POST("login")
-    suspend fun login(@Body request: LoginRequest): Response<BaseResponse<AuthResponse>>
+    @Multipart
+    @POST("api.php")
+    suspend fun login(@Part("task") task: RequestBody,
+                      @Part("phoneNumber") phoneNumber: RequestBody,
+                      @Part("password") password: RequestBody): Response<BaseResponse<AuthResponse>>
 
-    @POST("register")
-    suspend fun register(@Body request: RegisterRequest): Response<BaseResponse<AuthResponse>>
+
+    @Multipart
+    @POST("api.php")
+    suspend fun otpVerification(@Part("task") task: RequestBody,
+                      @Part("token") token: RequestBody,
+                      @Part("otp") otp: RequestBody): Response<BaseResponse<AuthResponse>>
+
+    @Multipart
+    @POST("api.php")
+    suspend fun register(@Part("task") task: RequestBody,
+                         @Part("email") email: RequestBody,
+                         @Part("firstName") firstName: RequestBody,
+                         @Part("password") password: RequestBody,
+                         @Part("phoneNumber") phoneNumber: RequestBody,
+                         @Part("ref") ref: RequestBody): Response<BaseResponse<AuthResponse>>
 
     @POST("auth/refresh")
     suspend fun refreshToken(@Body refreshToken: String): Response<BaseResponse<AuthResponse>>

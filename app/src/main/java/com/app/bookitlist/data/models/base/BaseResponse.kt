@@ -2,7 +2,8 @@ package com.app.bookitlist.data.models.base
 
 data class BaseResponse<T>(
     val success: Boolean = false,
-    val message: String = "",
+    val msg: String = "",
+    val token: String = "",
     val data: T? = null,
     val error: String? = null,
     val code: Int = 0
@@ -19,6 +20,7 @@ sealed class ApiResult<out T> {
 data class NetworkResponse<T>(
     val isSuccess: Boolean,
     val data: T? = null,
-    val message: String = "",
+    val msg: String = "",
+    val token: String = "",
     val errorCode: Int = 0
 )

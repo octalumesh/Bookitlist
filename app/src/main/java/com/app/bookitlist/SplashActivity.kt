@@ -22,7 +22,6 @@ class SplashActivity : AppCompatActivity() {
             // Create an Intent to start WelcomeActivity
             val intent = Intent(this@SplashActivity, WelcomeActivity::class.java)
             startActivity(intent)
-
             // Finish SplashActivity so it's removed from the back stack
             finish()
         }, SPLASH_DELAY)

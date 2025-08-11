@@ -17,12 +17,13 @@ abstract class BaseRepository {
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiCall()
+                println("Response: $response")
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body?.success == true) {
                         ApiResult.Success(body.data!!)
                     } else {
-                        ApiResult.Error(Exception(body?.message ?: "Unknown error"))
+                        ApiResult.Error(Exception(body?.msg ?: "Unknown error"))
                     }
                 } else {
                     ApiResult.Error(Exception("HTTP ${response.code()}: ${response.message()}"))
@@ -45,26 +46,26 @@ abstract class BaseRepository {
                     NetworkResponse(
                         isSuccess = true,
                         data = body.data,
-                        message = body.message
+                        msg = body.msg
                     )
                 } else {
                     NetworkResponse(
                         isSuccess = false,
-                        message = body?.message ?: "Unknown error",
+                        msg = body?.msg ?: "Unknown error",
                         errorCode = body?.code ?: 0
                     )
                 }
             } else {
                 NetworkResponse(
                     isSuccess = false,
-                    message = "HTTP Error: ${response.code()}",
+                    msg = "HTTP Error: ${response.code()}",
                     errorCode = response.code()
                 )
             }
         } catch (e: Exception) {
             NetworkResponse(
                 isSuccess = false,
-                message = e.message ?: "Unknown error occurred"
+                msg = e.message ?: "Unknown error occurred"
             )
         }
     }

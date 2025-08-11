@@ -2,7 +2,6 @@ package com.app.bookitlist
 
 import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -11,6 +10,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import com.app.bookitlist.databinding.DialogOtpVerificationBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class OtpVerificationDialog(
-    private val context: Context,
+    private val activity: FragmentActivity,
     private val phoneNumber: String,
     private val onVerificationSuccess: () -> Unit,
     private val onResendOtp: () -> Unit
@@ -28,13 +29,16 @@ class OtpVerificationDialog(
     private lateinit var binding: DialogOtpVerificationBinding
     private lateinit var otpEditTexts: List<EditText>
     private var currentOtp = ""
+    private val viewModel: OtpVerificationViewModel by lazy {
+        ViewModelProvider(activity)[OtpVerificationViewModel::class.java]
+    }
 
     fun show() {
         // Initialize ViewBinding
-        binding = DialogOtpVerificationBinding.inflate(LayoutInflater.from(context))
+        binding = DialogOtpVerificationBinding.inflate(LayoutInflater.from(activity))
 
         // Create dialog with ViewBinding root
-        dialog = AlertDialog.Builder(context)
+        dialog = AlertDialog.Builder(activity)
             .setView(binding.root)
             .setCancelable(false)
             .create()
@@ -43,6 +47,7 @@ class OtpVerificationDialog(
 
         // Setup all views and listeners
         setupViews()
+        observeViewModel()
 
         // Show dialog
         dialog.show()
@@ -75,15 +80,39 @@ class OtpVerificationDialog(
         binding.tvResendOtp.setOnClickListener {
             clearOtpInputs()
             onResendOtp()
-            Toast.makeText(context, "OTP resent successfully", Toast.LENGTH_SHORT).show()
+            viewModel.resendOtp()
+            Toast.makeText(activity, "OTP resent successfully", Toast.LENGTH_SHORT).show()
         }
 
         // Verify button click listener
         binding.btnVerify.setOnClickListener {
             if (currentOtp.length == 6) {
-                verifyOtp(currentOtp)
+                viewModel.verifyOtp(currentOtp)
             } else {
-                Toast.makeText(context, "Please enter complete OTP", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Please enter complete OTP", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.verificationStatus.observe(activity) { status ->
+            when (status) {
+                is VerificationStatus.Loading -> {
+                    binding.btnVerify.isEnabled = false
+                    binding.btnVerify.text = "Verifying..."
+                }
+
+                is VerificationStatus.Success -> {
+                    Toast.makeText(activity, "OTP verified successfully", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                    onVerificationSuccess()
+                }
+
+                is VerificationStatus.Error -> {
+                    Toast.makeText(activity, status.message, Toast.LENGTH_SHORT).show()
+                    clearOtpInputs()
+                    resetVerifyButton()
+                }
             }
         }
     }
@@ -137,37 +166,7 @@ class OtpVerificationDialog(
         if (currentOtp.length == 6) {
             CoroutineScope(Dispatchers.Main).launch {
                 delay(300) // Small delay for better user experience
-                verifyOtp(currentOtp)
-            }
-        }
-    }
-
-    private fun verifyOtp(otp: String) {
-        // Show loading state on verify button
-        binding.btnVerify.isEnabled = false
-        binding.btnVerify.text = "Verifying..."
-
-        // Simulate OTP verification process
-        // In real implementation, you would call your backend API here
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                // Simulate network call delay
-                delay(1500)
-
-                // For demo purposes, accept "123456" as valid OTP
-                // Replace this with actual API call
-                if (otp == "123456") {
-                    Toast.makeText(context, "OTP verified successfully", Toast.LENGTH_SHORT).show()
-                    dialog.dismiss()
-                    onVerificationSuccess()
-                } else {
-                    Toast.makeText(context, "Invalid OTP. Please try again.", Toast.LENGTH_SHORT).show()
-                    clearOtpInputs()
-                    resetVerifyButton()
-                }
-            } catch (e: Exception) {
-                Toast.makeText(context, "Verification failed. Please try again.", Toast.LENGTH_SHORT).show()
-                resetVerifyButton()
+                viewModel.verifyOtp(currentOtp)
             }
         }
     }
@@ -186,7 +185,7 @@ class OtpVerificationDialog(
     }
 
     private fun showKeyboard(editText: EditText) {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
     }
 

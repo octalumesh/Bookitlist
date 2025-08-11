@@ -4,10 +4,13 @@ import com.app.bookitlist.data.api.ApiService
 import com.app.bookitlist.data.models.base.ApiResult
 import com.app.bookitlist.data.models.base.BaseResponse
 import com.app.bookitlist.data.models.request.LoginRequest
+import com.app.bookitlist.data.models.request.OTPRequest
 import com.app.bookitlist.data.models.request.RegisterRequest
 import com.app.bookitlist.data.models.response.AuthResponse
 import com.app.bookitlist.data.models.response.User
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,20 +21,36 @@ class ApiRepository @Inject constructor(
 ) : BaseRepository() {
 
     // Authentication methods
-    suspend fun login(email: String, password: String): ApiResult<AuthResponse> {
+    suspend fun login(request: LoginRequest): ApiResult<AuthResponse> {
         return safeApiCall {
-            apiService.login(LoginRequest(email, password))
+            val task = request.task.toRequestBody("text/plain".toMediaTypeOrNull())
+            val phoneNumber = request.phoneNumber.toRequestBody("text/plain".toMediaTypeOrNull())
+            val password = request.password.toRequestBody("text/plain".toMediaTypeOrNull())
+            apiService.login(task, phoneNumber, password)
+        }
+    }
+
+    // Authentication methods
+    suspend fun otpVerification(request: OTPRequest): ApiResult<AuthResponse> {
+        return safeApiCall {
+            val task = request.task.toRequestBody("text/plain".toMediaTypeOrNull())
+            val token = request.token.toRequestBody("text/plain".toMediaTypeOrNull())
+            val otp = request.otp.toRequestBody("text/plain".toMediaTypeOrNull())
+            apiService.otpVerification(task, token, otp)
         }
     }
 
     suspend fun register(
-        name: String,
-        email: String,
-        password: String,
-        phone: String
+        request: RegisterRequest
     ): ApiResult<AuthResponse> {
         return safeApiCall {
-            apiService.register(RegisterRequest(name, email, password, phone))
+            val task = request.task.toRequestBody("text/plain".toMediaTypeOrNull())
+            val email = request.email.toRequestBody("text/plain".toMediaTypeOrNull())
+            val phoneNumber = request.phoneNumber.toRequestBody("text/plain".toMediaTypeOrNull())
+            val password = request.password.toRequestBody("text/plain".toMediaTypeOrNull())
+            val firstName = request.firstName.toRequestBody("text/plain".toMediaTypeOrNull())
+            val ref = request.ref.toRequestBody("text/plain".toMediaTypeOrNull())
+            apiService.register(task, email, firstName, password, phoneNumber, ref)
         }
     }
 

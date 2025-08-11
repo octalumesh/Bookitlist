@@ -24,8 +24,8 @@ class AuthInterceptor @Inject constructor(
         
         val authenticatedRequest = originalRequest.newBuilder()
             .header("Authorizationkey", "TVBBRE1JTjpSZ3NwUmdzcDEyMzQh")
-            .header("Content-Type", "application/json")
-            .header("Accept", "application/json")
+            //.header("Content-Type", "application/json")
+            .header("Accept", "*/*")
             .build()
         
         val response = chain.proceed(authenticatedRequest)
