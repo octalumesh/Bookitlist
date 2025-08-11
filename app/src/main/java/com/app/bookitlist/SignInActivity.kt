@@ -77,10 +77,10 @@ class SignInActivity : AppCompatActivity() {
 
     fun showDialog() {
         val otpDialog = OtpVerificationDialog(
-            context = this,
             phoneNumber = "+1234567890",
             onVerificationSuccess = { /* Handle success */ },
-            onResendOtp = { /* Handle resend */ }
+            onResendOtp = { /* Handle resend */ },
+            activity = this
         )
         otpDialog.show()
     }
